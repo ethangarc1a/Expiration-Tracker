@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "ExpiryBuddy",
+    "slug": "expiry-buddy",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "expirybuddy",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "backgroundColor": "#2563eb"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.expirybuddy.app"
+    },
+    "android": {
+      "package": "com.expirybuddy.app"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow ExpiryBuddy to access your camera to scan expiration dates on product labels."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "sounds": []
+        }
+      ],
+      "expo-asset"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
