@@ -1,1 +1,1 @@
-export const DEMO_URL = 'https://your-demo-url.vercel.app';
+export const DEMO_URL = 'https://expiration-tracker-sigma.vercel.app';

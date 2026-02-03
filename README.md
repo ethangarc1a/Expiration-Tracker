@@ -1,6 +1,6 @@
 # ExpiryBuddy
 
-**Demo**: [Try the web demo](https://your-demo-url.vercel.app)
+**Demo**: [Try the web demo](https://expiration-tracker-sigma.vercel.app)
 
 A local-first Expo React Native app for tracking expiration dates on food and household items with on-device OCR scanning.
 
