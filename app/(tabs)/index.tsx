@@ -10,7 +10,6 @@ import {
   Modal,
   TouchableOpacity,
   Platform,
-  Linking,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -29,7 +28,6 @@ import { BlurText } from '../../components/BlurText';
 import { CardNav } from '../../components/CardNav';
 import { AnimatedListItem } from '../../components/AnimatedListItem';
 import { BubbleMenu } from '../../components/BubbleMenu';
-import { DEMO_URL } from '../../constants/links';
 
 export default function ItemsScreen() {
   const router = useRouter();
@@ -299,20 +297,9 @@ export default function ItemsScreen() {
         }}
       />
       <View style={styles.header}>
-        <View style={styles.headerTop}>
-          <BlurText style={[styles.title, { color: colors.text }]}>
-            Your Pantry
-          </BlurText>
-          <TouchableOpacity
-            style={[styles.demoLink, { borderColor: colors.border }]}
-            onPress={() => Linking.openURL(DEMO_URL)}
-          >
-            <Ionicons name="link-outline" size={14} color={colors.textSecondary} />
-            <Text style={[styles.demoLinkText, { color: colors.textSecondary }]}>
-              Try demo
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <BlurText style={[styles.title, { color: colors.text }]}>
+          Your Pantry
+        </BlurText>
         <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
           Track expirations with style
         </Text>
@@ -524,28 +511,9 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     gap: 4,
   },
-  headerTop: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 12,
-  },
   title: {
     fontSize: 28,
     fontWeight: '800',
-  },
-  demoLink: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 999,
-    borderWidth: 1,
-  },
-  demoLinkText: {
-    fontSize: 12,
-    fontWeight: '600',
   },
   subtitle: {
     fontSize: 14,

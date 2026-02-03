@@ -8,9 +8,9 @@ interface AuroraBackgroundProps {
 
 export function AuroraBackground({ style }: AuroraBackgroundProps) {
   const { colors } = useAppTheme();
-  const blob1 = useRef(new Animated.ValueXY({ x: -40, y: -20 })).current;
-  const blob2 = useRef(new Animated.ValueXY({ x: 120, y: 40 })).current;
-  const blob3 = useRef(new Animated.ValueXY({ x: -80, y: 140 })).current;
+  const blob1 = useRef(new Animated.ValueXY({ x: -20, y: -10 })).current;
+  const blob2 = useRef(new Animated.ValueXY({ x: 60, y: 20 })).current;
+  const blob3 = useRef(new Animated.ValueXY({ x: -40, y: 80 })).current;
 
   useEffect(() => {
     const animateBlob = (blob: Animated.ValueXY, toX: number, toY: number, duration: number) =>
@@ -29,9 +29,9 @@ export function AuroraBackground({ style }: AuroraBackgroundProps) {
 
     const loop = Animated.loop(
       Animated.parallel([
-        animateBlob(blob1, 60, 30, 9000),
-        animateBlob(blob2, -40, 80, 11000),
-        animateBlob(blob3, 50, -60, 10000),
+        animateBlob(blob1, 24, 18, 22000),
+        animateBlob(blob2, -18, 26, 26000),
+        animateBlob(blob3, 20, -22, 24000),
       ])
     );
     loop.start();
@@ -45,8 +45,8 @@ export function AuroraBackground({ style }: AuroraBackgroundProps) {
         style={[
           styles.blob,
           {
-            backgroundColor: colors.primary,
-            opacity: 0.18,
+            backgroundColor: colors.primaryLight,
+            opacity: 0.09,
             transform: blob1.getTranslateTransform(),
           },
           style,
@@ -58,8 +58,8 @@ export function AuroraBackground({ style }: AuroraBackgroundProps) {
           styles.blob,
           styles.blobSecondary,
           {
-            backgroundColor: colors.success,
-            opacity: 0.14,
+            backgroundColor: colors.primary,
+            opacity: 0.07,
             transform: blob2.getTranslateTransform(),
           },
           style,
@@ -72,7 +72,7 @@ export function AuroraBackground({ style }: AuroraBackgroundProps) {
           styles.blobTertiary,
           {
             backgroundColor: colors.primaryLight,
-            opacity: 0.16,
+            opacity: 0.08,
             transform: blob3.getTranslateTransform(),
           },
           style,

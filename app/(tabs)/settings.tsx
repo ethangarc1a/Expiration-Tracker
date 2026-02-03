@@ -14,7 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useSettings } from '../../hooks/useSettings';
 import { CategoryPicker } from '../../components/CategoryPicker';
 import { useAppTheme } from '../../hooks/useAppTheme';
-import { BeamsBackground } from '../../components/BeamsBackground';
+import { AuroraBackground } from '../../components/AuroraBackground';
 import { BlurText } from '../../components/BlurText';
 import { exportBackup, importBackup } from '../../services/backup';
 import {
@@ -266,7 +266,7 @@ export default function SettingsScreen() {
       style={[styles.container, { backgroundColor: colors.background }]}
       contentContainerStyle={styles.content}
     >
-      <BeamsBackground />
+      <AuroraBackground />
       <View style={styles.header}>
         <BlurText style={[styles.title, { color: colors.text }]}>
           Settings
@@ -422,59 +422,6 @@ export default function SettingsScreen() {
                 updateSettings({ autoDeleteExpiredDays: Math.max(0, parseInt(value || '0', 10)) })
               }
             />
-          </View>
-        </View>
-      </View>
-
-      {/* Appearance Section */}
-      <View style={styles.section}>
-        <Text style={[styles.sectionTitle, { color: colors.text }]}>Appearance</Text>
-        <View style={[styles.card, { backgroundColor: colors.surface }]}>
-          <Text style={[styles.settingLabel, { color: colors.text }]}>Theme</Text>
-          <View style={styles.reminderChips}>
-            {(['system', 'light', 'dark'] as const).map((mode) => {
-              const isActive = settings.themePreference === mode;
-              return (
-                <TouchableOpacity
-                  key={mode}
-                  style={[
-                    styles.reminderChip,
-                    {
-                      backgroundColor: isActive ? colors.primary : colors.surfaceVariant,
-                      borderColor: isActive ? colors.primary : colors.border,
-                    },
-                  ]}
-                  onPress={() => updateSettings({ themePreference: mode })}
-                >
-                  <Text style={{ color: isActive ? '#fff' : colors.textSecondary }}>
-                    {mode}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-          <Text style={[styles.settingLabel, { color: colors.text }]}>Language</Text>
-          <View style={styles.reminderChips}>
-            {['en', 'es', 'fr'].map((lang) => {
-              const isActive = settings.language === lang;
-              return (
-                <TouchableOpacity
-                  key={lang}
-                  style={[
-                    styles.reminderChip,
-                    {
-                      backgroundColor: isActive ? colors.primary : colors.surfaceVariant,
-                      borderColor: isActive ? colors.primary : colors.border,
-                    },
-                  ]}
-                  onPress={() => updateSettings({ language: lang })}
-                >
-                  <Text style={{ color: isActive ? '#fff' : colors.textSecondary }}>
-                    {lang.toUpperCase()}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
           </View>
         </View>
       </View>
