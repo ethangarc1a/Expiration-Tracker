@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   Alert,
   ScrollView,
+  Platform,
 } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import { Ionicons } from '@expo/vector-icons';
@@ -30,6 +31,30 @@ export function OCRPreview({ onDateExtracted, onCancel }: OCRPreviewProps) {
   const cameraRef = useRef<CameraView>(null);
 
   const { colors } = useAppTheme();
+
+  if (Platform.OS === 'web') {
+    return (
+      <View style={[styles.container, { backgroundColor: colors.background }]}>
+        <View style={styles.permissionContainer}>
+          <Ionicons name="camera-outline" size={64} color={colors.textSecondary} />
+          <Text style={[styles.permissionTitle, { color: colors.text }]}>
+            Scanning Not Available
+          </Text>
+          <Text style={[styles.permissionText, { color: colors.textSecondary }]}>
+            OCR scanning requires a mobile build. Please use manual entry on the web demo.
+          </Text>
+          <TouchableOpacity
+            style={[styles.cancelButton, { borderColor: colors.border }]}
+            onPress={onCancel}
+          >
+            <Text style={[styles.cancelButtonText, { color: colors.textSecondary }]}>
+              Back to Form
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
 
   const handleCapture = async () => {
     if (!cameraRef.current || isProcessing) return;

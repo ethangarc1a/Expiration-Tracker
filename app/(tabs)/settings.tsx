@@ -17,9 +17,16 @@ import { useAppTheme } from '../../hooks/useAppTheme';
 import { BeamsBackground } from '../../components/BeamsBackground';
 import { BlurText } from '../../components/BlurText';
 import { exportBackup, importBackup } from '../../services/backup';
-import { getAllItems, getItemCount, updateItem as dbUpdateItem } from '../../services/database';
+import {
+  addItem,
+  deleteAllItems,
+  getAllItems,
+  getItemCount,
+  updateItem as dbUpdateItem,
+} from '../../services/database';
 import { rescheduleReminders, cancelReminders } from '../../services/notifications';
 import { Platform } from 'react-native';
+import { formatDateForStorage } from '../../services/dateParser';
 
 export default function SettingsScreen() {
   const { colors } = useAppTheme();
@@ -28,6 +35,8 @@ export default function SettingsScreen() {
   const [isExporting, setIsExporting] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
   const [isRescheduling, setIsRescheduling] = useState(false);
+  const [isSeeding, setIsSeeding] = useState(false);
+  const [isClearing, setIsClearing] = useState(false);
 
   const handleReminderDaysChange = async (value: number) => {
     const next = Math.round(value);
@@ -168,6 +177,88 @@ export default function SettingsScreen() {
         },
       ]
     );
+  };
+
+  const buildDate = (offsetDays: number) => {
+    const date = new Date();
+    date.setDate(date.getDate() + offsetDays);
+    return formatDateForStorage(date);
+  };
+
+  const handleLoadDemoData = async () => {
+    setIsSeeding(true);
+    try {
+      await deleteAllItems();
+      const demoItems = [
+        {
+          name: 'Greek Yogurt',
+          category: 'Dairy',
+          quantity: 2,
+          expirationDate: buildDate(4),
+          notes: 'Pick up more if on sale',
+          photoUris: [],
+          recurrenceDays: null,
+        },
+        {
+          name: 'Spinach',
+          category: 'Produce',
+          quantity: 1,
+          expirationDate: buildDate(2),
+          notes: null,
+          photoUris: [],
+          recurrenceDays: null,
+        },
+        {
+          name: 'Ground Coffee',
+          category: 'Pantry',
+          quantity: 1,
+          expirationDate: buildDate(60),
+          notes: 'Try cold brew',
+          photoUris: [],
+          recurrenceDays: null,
+        },
+        {
+          name: 'Chicken Breast',
+          category: 'Meat',
+          quantity: 3,
+          expirationDate: buildDate(-1),
+          notes: 'Freeze next time',
+          photoUris: [],
+          recurrenceDays: null,
+        },
+        {
+          name: 'Vitamin D',
+          category: 'Medicine',
+          quantity: 1,
+          expirationDate: buildDate(120),
+          notes: null,
+          photoUris: [],
+          recurrenceDays: 90,
+        },
+      ];
+
+      for (const item of demoItems) {
+        await addItem(item);
+      }
+
+      Alert.alert('Demo Ready', 'Sample items were added to the web demo.');
+    } catch (error) {
+      Alert.alert('Error', 'Could not load demo data.');
+    } finally {
+      setIsSeeding(false);
+    }
+  };
+
+  const handleClearDemoData = async () => {
+    setIsClearing(true);
+    try {
+      await deleteAllItems();
+      Alert.alert('Cleared', 'All demo items were removed.');
+    } catch (error) {
+      Alert.alert('Error', 'Could not clear demo data.');
+    } finally {
+      setIsClearing(false);
+    }
   };
 
   return (
@@ -426,7 +517,11 @@ export default function SettingsScreen() {
             {isImporting ? (
               <ActivityIndicator size="small" color={colors.primary} />
             ) : (
-              <Ionicons name="upload-outline" size={24} color={colors.primary} />
+              <Ionicons
+                name={'upload-outline' as keyof typeof Ionicons.glyphMap}
+                size={24}
+                color={colors.primary}
+              />
             )}
             <View style={styles.backupButtonText}>
               <Text style={[styles.backupButtonTitle, { color: colors.text }]}>
@@ -440,6 +535,47 @@ export default function SettingsScreen() {
           </TouchableOpacity>
         </View>
       </View>
+
+      {Platform.OS === 'web' && (
+        <View style={styles.section}>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Demo</Text>
+          <View style={[styles.card, { backgroundColor: colors.surface }]}>
+            <Text style={[styles.settingDescription, { color: colors.textSecondary }]}>
+              Load sample items to showcase the app in a web demo.
+            </Text>
+            <View style={styles.demoActions}>
+              <TouchableOpacity
+                style={[styles.demoButton, { backgroundColor: colors.primary }]}
+                onPress={handleLoadDemoData}
+                disabled={isSeeding}
+              >
+                {isSeeding ? (
+                  <ActivityIndicator size="small" color="#fff" />
+                ) : (
+                  <Text style={styles.demoButtonText}>Load Demo Data</Text>
+                )}
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.demoButton,
+                  styles.demoButtonSecondary,
+                  { borderColor: colors.border },
+                ]}
+                onPress={handleClearDemoData}
+                disabled={isClearing}
+              >
+                {isClearing ? (
+                  <ActivityIndicator size="small" color={colors.textSecondary} />
+                ) : (
+                  <Text style={[styles.demoButtonText, { color: colors.textSecondary }]}>
+                    Clear Demo Data
+                  </Text>
+                )}
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      )}
 
       {/* About Section */}
       <View style={styles.section}>
@@ -612,5 +748,23 @@ const styles = StyleSheet.create({
   aboutValue: {
     fontSize: 14,
     fontWeight: '500',
+  },
+  demoActions: {
+    marginTop: 12,
+    gap: 10,
+  },
+  demoButton: {
+    borderRadius: 12,
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  demoButtonSecondary: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+  },
+  demoButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: '600',
   },
 });

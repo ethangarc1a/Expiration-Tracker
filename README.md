@@ -1,5 +1,7 @@
 # ExpiryBuddy
 
+**Demo**: [Try the web demo](https://your-demo-url.vercel.app)
+
 A local-first Expo React Native app for tracking expiration dates on food and household items with on-device OCR scanning.
 
 ## Features
@@ -11,6 +13,13 @@ A local-first Expo React Native app for tracking expiration dates on food and ho
 - **Backup & Restore**: Export/import your data as JSON files
 - **Offline-First**: All data stored locally with SQLite, no internet required
 - **Dark Mode**: Automatic theme switching based on system settings
+
+## Case Study (Resume-Ready)
+
+- **Goal**: Reduce food/household waste by tracking expirations in one place.
+- **Constraints**: Offline-first, fast UX, and no cloud dependencies.
+- **Key Choices**: SQLite for local storage, ML Kit OCR for on-device scanning, Expo Router for clean navigation.
+- **Outcome**: Clean item lifecycle flow (add → track → notify → consume), with web demo support.
 
 ## Tech Stack
 
@@ -57,6 +66,25 @@ A local-first Expo React Native app for tracking expiration dates on food and ho
    ```
 
    Note: OCR scanning requires a development build due to native module dependencies.
+
+## Web Demo (shareable link)
+
+You can deploy a browser-based demo without publishing to app stores.
+
+1. **Build the web output**:
+
+   ```bash
+   npx expo export --platform web
+   ```
+
+2. **Host the `dist/` folder** on any static host:
+   - **Vercel**: Build command `npx expo export --platform web`, Output dir `dist`
+   - **Netlify**: Build command `npx expo export --platform web`, Publish dir `dist`
+
+Notes:
+- Web demo runs in localStorage (no accounts needed).
+- OCR scanning and notifications are disabled on web.
+- Update `constants/links.ts` with your deployed URL to enable the in-app "Try demo" button.
 
 ## Project Structure
 

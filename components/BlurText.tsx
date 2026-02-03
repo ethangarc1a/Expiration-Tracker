@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from 'react';
-import { Animated, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
+import { Animated, StyleProp, StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
 
 interface BlurTextProps {
   children: string;
-  style?: TextStyle;
-  containerStyle?: ViewStyle;
+  style?: StyleProp<TextStyle>;
+  containerStyle?: StyleProp<ViewStyle>;
   durationMs?: number;
 }
 

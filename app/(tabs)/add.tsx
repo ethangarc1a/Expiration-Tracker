@@ -35,8 +35,10 @@ export default function AddScreen() {
 
   const [mode, setMode] = useState<AddMode>('manual');
   useEffect(() => {
-    if (params.mode === 'scan') {
+    if (params.mode === 'scan' && Platform.OS !== 'web') {
       setMode('scan');
+    } else if (Platform.OS === 'web') {
+      setMode('manual');
     }
   }, [params.mode]);
   const [name, setName] = useState('');
@@ -194,13 +196,18 @@ export default function AddScreen() {
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
             Capture details with a clean, animated flow
           </Text>
+          {Platform.OS === 'web' && (
+            <Text style={[styles.webHint, { color: colors.textSecondary }]}>
+              Web demo mode: scanning is available on mobile builds only.
+            </Text>
+          )}
         </View>
         {/* Mode Toggle */}
         <View style={styles.modeToggle}>
           <TouchableOpacity
             style={[
               styles.modeButton,
-              mode === 'manual' && { backgroundColor: colors.primary },
+              { backgroundColor: colors.primary },
               { borderColor: colors.border },
             ]}
             onPress={() => setMode('manual')}
@@ -208,40 +215,41 @@ export default function AddScreen() {
             <Ionicons
               name="create-outline"
               size={20}
-              color={mode === 'manual' ? '#fff' : colors.textSecondary}
+              color="#fff"
             />
             <Text
               style={[
                 styles.modeButtonText,
-                { color: mode === 'manual' ? '#fff' : colors.textSecondary },
+                { color: '#fff' },
               ]}
             >
               Manual
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[
-              styles.modeButton,
-              mode === 'scan' && { backgroundColor: colors.primary },
-              { borderColor: colors.border },
-            ]}
-            onPress={() => setMode('scan')}
-          >
-            <Ionicons
-              name="camera-outline"
-              size={20}
-              color={mode === 'scan' ? '#fff' : colors.textSecondary}
-            />
-            <Text
+          {Platform.OS !== 'web' && (
+            <TouchableOpacity
               style={[
-                styles.modeButtonText,
-                { color: mode === 'scan' ? '#fff' : colors.textSecondary },
+                styles.modeButton,
+                { borderColor: colors.border },
               ]}
+              onPress={() => setMode('scan')}
             >
-              Scan
-            </Text>
-          </TouchableOpacity>
+              <Ionicons
+                name="camera-outline"
+                size={20}
+                color={colors.textSecondary}
+              />
+              <Text
+                style={[
+                  styles.modeButtonText,
+                  { color: colors.textSecondary },
+                ]}
+              >
+                Scan
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
 
         {/* Form Fields */}
@@ -422,6 +430,10 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 13,
+  },
+  webHint: {
+    fontSize: 12,
+    marginTop: 6,
   },
   modeToggle: {
     flexDirection: 'row',
